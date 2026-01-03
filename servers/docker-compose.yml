@@ -1,0 +1,56 @@
+
+services:
+  server1:
+    image: docker:27-dind
+    privileged: true
+    hostname: server1
+    networks:
+      swarm-net:
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+      - "2375:2375"
+      - "12345:12345" # TODO Alloy UI test
+    volumes:
+      - server1-data:/var/lib/docker
+      - ./volume/shared:/shared
+      - ./volume/docker:/etc/docker
+      - ./alloy:/alloy
+
+  server2:
+    image: docker:27-dind
+    privileged: true
+    hostname: server2
+    networks:
+      swarm-net:
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    volumes:
+      - server2-data:/var/lib/docker
+      - ./volume/shared:/shared
+      - ./volume/docker:/etc/docker
+
+  server3:
+    image: docker:27-dind
+    privileged: true
+    hostname: server3
+    networks:
+      swarm-net:
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    volumes:
+      - server3-data:/var/lib/docker
+      - ./volume/shared:/shared
+      - ./volume/docker:/etc/docker
+
+volumes:
+  server1-data:
+  server2-data:
+  server3-data:
+
+networks:
+  swarm-net:
+    driver: bridge
+

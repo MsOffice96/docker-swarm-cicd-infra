@@ -1,0 +1,33 @@
+version: "3.9"
+
+# docker stack deploy -c alloy-stack.yml observability-agents
+
+services:
+  alloy:
+    image: grafana/alloy:v1.12.0
+    command:
+      - run
+      - /etc/alloy/alloy.hcl
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    configs: # alloy-deploy.sh 에 docker create grafana_alloy_agent_config ./config/alloy.hcl
+      - source: alloy_agent_config
+        target: /etc/alloy/alloy.hcl
+    ports:
+      - "12345:12345"
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy:
+        condition: on-failure
+    networks:
+      - alloy-network
+
+configs:
+  alloy_agent_config:
+    external: true
+networks:
+  alloy-network:
+    driver: overlay

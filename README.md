@@ -19,7 +19,7 @@
 ```bash
   # Start DinD containers
   cd servers
-  docker compose up -d
+  docker-compose up -d
   docker ps
 
   # Access the dind container
@@ -31,5 +31,22 @@
   exit
 
   # Verify the Swarm cluster
-  docker exec -it <manager_container_id> docker node ls
-```   
+  docker exec -it <manager_container_id>
+  docker node ls
+```
+
+### Gitea
+- Gitea is a lightweight, self-hosted Git service used as a replacement for GitHub
+  in local development and CI/CD environments.
+```bash
+# Run Gitea Server
+cd gitea
+docker-compose up -d
+
+# Open your browser and navigate to
+http://localhost:3000
+
+# Complete the initial installation via the web interface
+# Create an admin account and user account
+# Create repository as needed
+```
